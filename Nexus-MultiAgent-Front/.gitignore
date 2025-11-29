@@ -1,0 +1,106 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment
+.env
+.env.local
+.env.production
+
+# README.md
+# NEXUS Frontend
+
+Sistema de frontend para la plataforma NEXUS de comercialización de multiagentes de IA.
+
+## Stack Tecnológico
+
+- React 18+ con TypeScript
+- Vite
+- TailwindCSS
+- Zustand (gestión de estado)
+- Axios (cliente HTTP)
+- Framer Motion (animaciones)
+- Logto (autenticación)
+- React Router DOM
+
+## Instalación
+
+1. Clonar el repositorio
+2. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+
+3. Configurar variables de entorno:
+   - Copiar `.env.example` a `.env.local`
+   - Completar las variables de Logto y API
+
+4. Ejecutar en desarrollo:
+   ```bash
+   npm run dev
+   ```
+
+## Arquitectura
+
+El proyecto sigue una arquitectura limpia por capas:
+
+- **Domain**: Entidades y repositorios (interfaces)
+- **Infrastructure**: Implementaciones de repositorios, mappers, API client
+- **Presentation**: Componentes, hooks, stores, páginas
+
+## Estructura de Carpetas
+
+```
+src/
+├── core/
+│   ├── domain/
+│   ├── infrastructure/
+│   └── presentation/
+├── config/
+├── types/
+├── utils/
+└── styles/
+```
+
+## Scripts Disponibles
+
+- `npm run dev` - Servidor de desarrollo
+- `npm run build` - Build de producción
+- `npm run preview` - Preview del build
+- `npm run lint` - Linter de código
+
+## Convenciones de Código
+
+- Nombres descriptivos y autoexplicativos
+- Componentes pequeños y reutilizables
+- Sin comentarios en código (código autoexplicativo)
+- Principios SOLID
+- Clean Code
+
+## Contribución
+
+1. Crear una rama feature
+2. Realizar cambios siguiendo las convenciones
+3. Crear Pull Request
+4. Esperar revisión y aprobación
