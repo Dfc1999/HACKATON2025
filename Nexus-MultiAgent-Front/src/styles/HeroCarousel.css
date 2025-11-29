@@ -1,0 +1,45 @@
+.hero-carousel {
+position: relative;
+width: 100%;
+height: 60vh;
+overflow: hidden;
+background-color: #2e0527;
+}
+
+
+@media (min-width: 768px) {
+.hero-carousel {
+height: 70vh;
+}
+}
+
+
+@media (min-width: 1024px) {
+.hero-carousel {
+height: 80vh;
+}
+}
+
+
+.carousel-image-wrapper {
+position: absolute;
+inset: 0;
+}
+
+
+.carousel-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+
+.carousel-overlay {
+position: absolute;
+inset: 0;
+background: linear-gradient(to top, rgba(46, 5, 39, 0.5), transparent);
+}
+
+
+.carousel-dots {
+}
