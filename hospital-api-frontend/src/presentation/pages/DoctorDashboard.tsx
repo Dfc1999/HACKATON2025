@@ -49,7 +49,41 @@ const StatsCard: React.FC<StatsCardProps> = ({
   );
 };
 
+import CameraCapture from '../components/shared/CameraCapture.tsx';
+import PhotoConfirmation from '../components/patient/PhotoConfirmation.tsx';
+import Modal from '../components/shared/Modal.tsx';
+
 const DoctorDashboardStats: React.FC = () => {
+  const [isCameraOpen, setIsCameraOpen] = React.useState(false);
+  const [capturedPhoto, setCapturedPhoto] = React.useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = React.useState(false);
+  const [showMockModal, setShowMockModal] = React.useState(false);
+  const [confidenceScore, setConfidenceScore] = React.useState(0.85);
+
+  const handleCapture = (photo: string) => {
+    setCapturedPhoto(photo);
+  };
+
+  const handleConfirm = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setIsProcessing(false);
+      setShowMockModal(true);
+    }, 2000);
+  };
+
+  const handleRetake = () => {
+    setCapturedPhoto(null);
+    setIsCameraOpen(true);
+  };
+
+  const mockPatientData = {
+    nombre: 'Ariel Murillo González',
+    edad: 35,
+    diagnóstico: 'Hipertensión leve',
+    última_visita: '2025-11-20',
+    recomendaciones: 'Controlar presión arterial y mantener dieta baja en sodio.'
+  };
   const stats = [
     {
       title: 'Registros Totales',
@@ -123,10 +157,63 @@ const DoctorDashboardStats: React.FC = () => {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-              <button className="flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-teal-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+              <button
+                onClick={() => setIsCameraOpen(true)}
+                className="flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-semibold hover:from-teal-600 hover:to-teal-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+              >
                 <Scan size={20} />
                 <span>Identificar Paciente</span>
               </button>
+              
+              {isCameraOpen && (
+                <Modal isOpen={isCameraOpen} onClose={() => setIsCameraOpen(false)} title="Identificación Facial del Doctor">
+                  {!capturedPhoto && !isProcessing && (
+                    <CameraCapture
+                      onCapture={(photo: string) => handleCapture(photo)}
+                      onCancel={() => setIsCameraOpen(false)}
+                    />
+                  )}
+              
+                  {capturedPhoto && !isProcessing && (
+                    <PhotoConfirmation
+                      photoUrl={capturedPhoto}
+                      onConfirm={handleConfirm}
+                      onRetake={handleRetake}
+                      confidenceScore={confidenceScore}
+                    />
+                  )}
+              
+                  {isProcessing && (
+                    <div className="flex flex-col items-center justify-center p-6">
+                      <div className="animate-spin text-teal-600 mb-4">
+                        <Scan size={48} />
+                      </div>
+                      <p className="text-slate-700 font-medium">Procesando identificación...</p>
+                    </div>
+                  )}
+                </Modal>
+              )}
+              
+              {showMockModal && (
+                <Modal isOpen={showMockModal} onClose={() => setShowMockModal(false)} title="Datos del Paciente Identificado">
+                  <div className="space-y-4">
+                    <p><strong>Nombre:</strong> {mockPatientData.nombre}</p>
+                    <p><strong>Edad:</strong> {mockPatientData.edad}</p>
+                    <p><strong>Diagnóstico:</strong> {mockPatientData.diagnóstico}</p>
+                    <p><strong>Última visita:</strong> {mockPatientData.última_visita}</p>
+                    <p><strong>Recomendaciones:</strong> {mockPatientData.recomendaciones}</p>
+              
+                    <div className="mt-6 p-4 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl border border-teal-200 shadow-sm">
+                      <h4 className="text-lg font-semibold text-teal-700 mb-2">Opinión de la IA y Recomendaciones</h4>
+                      <p className="text-slate-700 text-sm leading-relaxed">
+                        La IA ha detectado que el paciente presenta enfermedades de base como hipertensión y estrés leve.
+                        Se recomienda mantener una dieta balanceada, realizar actividad física moderada y asistir a controles médicos regulares.
+                        Además, se sugiere monitorear la presión arterial y evitar el consumo excesivo de sal y cafeína.
+                      </p>
+                    </div>
+                  </div>
+                </Modal>
+              )}
               <button className="flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white rounded-xl font-semibold hover:from-cyan-600 hover:to-cyan-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                 <Calendar size={20} />
                 <span>Nueva Cita</span>
